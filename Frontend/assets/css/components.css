@@ -891,6 +891,16 @@
   color: var(--color-text);
 }
 
+.ml-note {
+  margin-top: var(--space-5);
+  background: var(--color-accent-blue-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: #2d4f96;
+}
+
 /* ---------- AI-чат (максимально простой пока) ---------- */
 
 .ai-fab {
@@ -983,6 +993,49 @@
   background: var(--color-surface-muted);
   color: var(--color-text);
   border-bottom-left-radius: var(--radius-xs);
+}
+
+.ai-panel__intro {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-normal);
+}
+
+/* ---------- Карточка реального ответа AI (AI_section/ai_rec.py) ---------- */
+
+.ai-response-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ai-response-card--error {
+  color: #8a5a12;
+}
+
+.ai-response-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.ai-response-badge--positive { background: var(--color-accent-green-soft); color: #2f6b3a; }
+.ai-response-badge--warning { background: var(--color-warning-soft); color: #8a5a12; }
+.ai-response-badge--neutral { background: var(--color-accent-blue-soft); color: #2d4f96; }
+
+.ai-response-row {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.ai-response-row--reasoning {
+  color: var(--color-text-secondary);
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--color-border);
 }
 
 .ai-panel__footer {

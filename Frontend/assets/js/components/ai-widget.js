@@ -1,12 +1,52 @@
 /**
- * СанАрт — сквозной AI-виджет: плавающая кнопка + простая чат-панель.
+ * СанАрт — сквозной AI-виджет: плавающая кнопка + чат-панель.
  * Монтируется на index.html и events.html (в #ai-widget-mount), на login.html
  * не подключается.
  *
- * Сейчас максимально просто и без выдуманной логики: сообщение пользователя
- * просто добавляется в ленту. Реальный вызов AI (бэкенд-функция
- * get_recommendation_json(event_input)) подключим, когда будет что показывать.
+ * Реальный вызов: POST /api/ai/chat → Backend/app.py → AI_section/ai_rec.py
+ * (get_recommendation_json, GigaChat). Без GIGACHAT_AUTH_KEY в AI_section/.env
+ * бэкенд вернёт понятную ошибку — показываем её как есть, без выдумывания
+ * ответа.
  */
+
+const AI_ACTION_LABELS = {
+  KEEP: { label: "Можно оставить как есть", tone: "positive" },
+  RESCHEDULE: { label: "Стоит перенести время", tone: "warning" },
+  CHANGE_FORMAT: { label: "Стоит изменить формат", tone: "warning" },
+  RESCHEDULE_AND_CHANGE_FORMAT: { label: "Перенести время и изменить формат", tone: "warning" },
+};
+
+function sanartEscapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function sanartRenderAIResponseCard(result) {
+  if (result.error) {
+    return `<div class="ai-response-card ai-response-card--error">${sanartEscapeHtml(result.error)}</div>`;
+  }
+
+  const action = AI_ACTION_LABELS[result.action] || { label: result.action || "—", tone: "neutral" };
+
+  const rows = [
+    ["Время", result.timing_evaluation],
+    ["Формат", result.format_evaluation],
+    ["Предложенное время", result.suggested_datetime],
+    ["Предложенный формат", result.suggested_format],
+  ]
+    .filter(([, value]) => value)
+    .map(([label, value]) => `<div class="ai-response-row"><strong>${label}:</strong> ${sanartEscapeHtml(value)}</div>`)
+    .join("");
+
+  return `
+    <div class="ai-response-card">
+      <span class="ai-response-badge ai-response-badge--${action.tone}">${sanartEscapeHtml(action.label)}</span>
+      ${rows}
+      ${result.reasoning ? `<div class="ai-response-row ai-response-row--reasoning">${sanartEscapeHtml(result.reasoning)}</div>` : ""}
+    </div>`;
+}
 
 function sanartInitAIWidget() {
   const mount = document.getElementById("ai-widget-mount");
@@ -18,13 +58,15 @@ function sanartInitAIWidget() {
     </button>
     <div class="ai-panel" id="ai-panel" hidden>
       <div class="ai-panel__header">
-        <span class="ai-panel__title">Чат СанАрт</span>
+        <span class="ai-panel__title">AI-ассистент СанАрт</span>
         <button class="overlay__close" id="ai-panel-close" type="button" aria-label="Закрыть">${SANART_ICONS.close}</button>
       </div>
-      <div class="ai-panel__body" id="ai-panel-body"></div>
+      <div class="ai-panel__body" id="ai-panel-body">
+        <p class="ai-panel__intro">Опишите идею мероприятия — оценим время и формат под целевую аудиторию.</p>
+      </div>
       <div class="ai-panel__footer">
         <div class="ai-input-row">
-          <textarea class="textarea-input" id="ai-input" rows="1" placeholder="Написать сообщение"></textarea>
+          <textarea class="textarea-input" id="ai-input" rows="1" placeholder="Например: хочу лекцию для школьников в 21:00 в будни"></textarea>
           <button class="ai-send-btn" id="ai-send" type="button" aria-label="Отправить">${SANART_ICONS.send}</button>
         </div>
       </div>
@@ -45,17 +87,38 @@ function sanartInitAIWidget() {
     panel.hidden = true;
   });
 
-  function handleSend() {
+  async function handleSend() {
     const text = input.value.trim();
     if (!text) return;
 
-    const el = document.createElement("div");
-    el.className = "ai-message ai-message--user";
-    el.textContent = text;
-    body.appendChild(el);
+    const userEl = document.createElement("div");
+    userEl.className = "ai-message ai-message--user";
+    userEl.textContent = text;
+    body.appendChild(userEl);
+    input.value = "";
+    sendBtn.disabled = true;
     body.scrollTop = body.scrollHeight;
 
-    input.value = "";
+    const thinkingEl = document.createElement("div");
+    thinkingEl.className = "ai-message ai-message--assistant";
+    thinkingEl.textContent = "Анализирую…";
+    body.appendChild(thinkingEl);
+    body.scrollTop = body.scrollHeight;
+
+    try {
+      const res = await fetch(`${SANART_API_BASE}/ai/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+      const result = await res.json();
+      thinkingEl.innerHTML = sanartRenderAIResponseCard(result);
+    } catch (e) {
+      thinkingEl.innerHTML = `<div class="ai-response-card ai-response-card--error">Не удалось связаться с бэкендом (${SANART_API_BASE}). Проверьте, что запущен Backend/app.py.</div>`;
+    }
+
+    sendBtn.disabled = false;
+    body.scrollTop = body.scrollHeight;
   }
 
   sendBtn.addEventListener("click", handleSend);

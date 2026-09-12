@@ -118,6 +118,18 @@ function buildEventDetailHtml(event, full) {
       <div class="event-context-item"><span class="event-context-item__label">Возраст аудитории</span><span class="event-context-item__value">${full.targetAgeMin}–${full.targetAgeMax}</span></div>`
           : ""
       }
+    </div>
+    ${full && full.mlPrediction ? buildMlNoteHtml(event, full.mlPrediction) : ""}`;
+}
+
+// ML-прогноз заполняемости (AI_section/ai_predict2.py, CatBoost) — для сравнения
+// с фактом. Модель обучена на реальных events/attendance того же датасета.
+function buildMlNoteHtml(event, ml) {
+  const diff = Math.round((ml.predictedFillRatePct - event.fillRatePct) * 10) / 10;
+  const diffLabel = diff === 0 ? "совпал с фактом" : diff > 0 ? `выше факта на ${ru1(Math.abs(diff))} п.п.` : `ниже факта на ${ru1(Math.abs(diff))} п.п.`;
+  return `
+    <div class="ml-note">
+      <strong>ML-прогноз заполняемости:</strong> ${ru1(ml.predictedFillRatePct)}% (${diffLabel}) — модель CatBoost, средняя ошибка ±${ru1(ml.modelMaePp)} п.п. на тестовой выборке.
     </div>`;
 }
 

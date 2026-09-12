@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СанАрт — Аудитория</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/audience.css" />
+</head>
+<body>
+  <!-- SVG-фильтр для "пиксельных" дисплейных заголовков (используется через .pixel-heading) -->
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="sanart-pixelate" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <div class="app-shell">
+    <div id="sidebar-mount"></div>
+
+    <main class="main">
+      <div id="topbar-mount"></div>
+
+      <div class="content">
+        <section class="dashboard-controls">
+          <div>
+            <h1 class="section-title audience-hero__title">Аудитория</h1>
+            <p class="form-hint audience-hero__subtitle">Сегменты вместо списка посетителей — кто приходит и как с ним работать.</p>
+          </div>
+        </section>
+
+        <div id="dq-banner"></div>
+
+        <section class="kpi-grid" id="audience-kpi-grid" aria-label="Ключевые показатели аудитории"></section>
+
+        <div class="dash-row dash-row--chart-donut">
+          <article class="card">
+            <div class="card__header">
+              <h3 class="card__title">Профиль сегментов</h3>
+            </div>
+            <div class="bar-chart" id="segment-engagement-chart"></div>
+          </article>
+
+          <article class="card">
+            <div class="card__header">
+              <h3 class="card__title">Доли сегментов</h3>
+            </div>
+            <div id="segment-share-donut"></div>
+          </article>
+        </div>
+
+        <section class="dashboard-controls">
+          <h2 class="section-title">Сегменты аудитории</h2>
+        </section>
+
+        <div class="segment-grid" id="segment-grid" aria-label="Сегменты аудитории"></div>
+
+        <div id="audience-note"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="ai-widget-mount"></div>
+
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components/sidebar.js"></script>
+  <script src="assets/js/components/topbar.js"></script>
+  <script src="assets/js/components/charts.js"></script>
+  <script src="assets/js/components/ai-widget.js"></script>
+  <script src="assets/js/pages/audience.js"></script>
+</body>
+</html>

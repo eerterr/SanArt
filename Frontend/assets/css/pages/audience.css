@@ -1,0 +1,98 @@
+/* СанАрт — специфичная раскладка страницы «Аудитория» */
+
+.audience-hero__title {
+  font-size: var(--fs-xl);
+}
+
+.audience-hero__subtitle {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Сетка карточек сегментов ---------- */
+
+.segment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+.segment-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.segment-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.segment-card__share {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.segment-card__badge {
+  display: inline-flex;
+  padding: 5px var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.segment-card__badge--loyal { background: var(--color-accent-green-soft); color: #2f6b3a; }
+.segment-card__badge--niche { background: var(--color-accent-purple-soft); color: #5b3fa8; }
+.segment-card__badge--new { background: var(--color-accent-blue-soft); color: #2d4f96; }
+.segment-card__badge--critics { background: var(--color-warning-soft); color: #8a5a12; }
+.segment-card__badge--default,
+.segment-card__badge--noise { background: var(--color-accent-gray-soft); color: var(--color-text-secondary); }
+
+.segment-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.segment-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.segment-card__stat span {
+  font-size: 10.5px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.segment-card__stat strong {
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.segment-card__action {
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .segment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1180px) {
+  .segment-card__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -19,17 +19,24 @@ AUTH_KEY = os.getenv("GIGACHAT_AUTH_KEY")
 if not AUTH_KEY:
     raise ValueError("Токен не найден. Проверь наличие файла .env по пути {BASE_DIR}")
 
+# GigaChat — российский домен Сбера, системный прокси (если он настроен в ОС,
+# например для обхода блокировок) для него не нужен и часто ломает запрос:
+# requests по умолчанию наследует прокси из окружения (trust_env), а если это
+# SOCKS-прокси без установленного PySocks — падает с "Missing dependencies for
+# SOCKS support" вместо реального ответа. Поэтому явно идём напрямую.
+NO_PROXY = {"http": None, "https": None}
+
 def get_access_token() -> str:
     url = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
     payload = {'scope': 'GIGACHAT_API_PERS'}
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
-        'RqUID': str(uuid.uuid4()), 
+        'RqUID': str(uuid.uuid4()),
         'Authorization': f'Basic {AUTH_KEY}'
     }
-    
-    response = requests.post(url, headers=headers, data=payload, verify=False)
+
+    response = requests.post(url, headers=headers, data=payload, verify=False, proxies=NO_PROXY)
     response.raise_for_status()
     return response.json()['access_token']
 
@@ -54,9 +61,9 @@ def generate_text(prompt: str, system_prompt: str = "") -> str:
         "temperature": 0.1,
     }
 
-    response = requests.post(url, headers=headers, json=payload, verify=False)
+    response = requests.post(url, headers=headers, json=payload, verify=False, proxies=NO_PROXY)
     response.raise_for_status()
-    
+
     return response.json()['choices'][0]['message']['content']
 
 # Тут могут в будущем полететь пути, пока что необходимо держать их в одной папке с кодом.
