@@ -29,16 +29,10 @@
   padding-left: var(--space-2);
 }
 
-.sidebar__logo {
-  font-size: 26px;
-  line-height: 1;
-  margin: 0;
-}
-
-.sidebar__logo-mark {
-  font-size: 0.5em;
-  vertical-align: super;
-  color: var(--color-text-secondary);
+.sidebar__logo-img {
+  display: block;
+  width: 108px;
+  height: auto;
 }
 
 .sidebar__tagline {

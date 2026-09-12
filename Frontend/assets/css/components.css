@@ -141,6 +141,28 @@
   color: var(--color-text);
 }
 
+.kpi-card__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.kpi-card__delta--up { color: var(--color-accent-green); }
+.kpi-card__delta--down { color: var(--color-accent-orange); }
+
+.kpi-card__delta-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.kpi-card__caption {
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-tertiary);
+}
+
 /* ---------- Dashboard grid ---------- */
 
 .dash-row {
@@ -746,12 +768,6 @@
 
 .event-card__photo {
   height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-surface-muted);
-  color: var(--color-text-tertiary);
-  font-style: italic;
 }
 
 .event-card__caption {
@@ -771,13 +787,7 @@
 }
 
 .event-photos__item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-surface-muted);
   border-radius: var(--radius-md);
-  color: var(--color-text-tertiary);
-  font-style: italic;
 }
 
 .event-photos__item--a {
@@ -794,6 +804,66 @@
   grid-column: 2;
   grid-row: 2;
 }
+
+/* ---------- Заглушки обложек мероприятий: цветной градиент вместо фото ---------- */
+/* Тот же приём блюра/радиальных градиентов, что и в .promo-banner__bg — */
+/* по одному узнаваемому сочетанию цветов на тип мероприятия. */
+
+.gradient-cover {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: inherit;
+}
+
+.gradient-cover::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  filter: blur(20px) saturate(120%);
+  transform: scale(1.15);
+}
+
+.gradient-cover--1::before {
+  background:
+    radial-gradient(60% 140% at 15% 30%, rgba(255, 122, 69, 0.65), transparent 60%),
+    radial-gradient(55% 160% at 85% 75%, rgba(167, 139, 250, 0.5), transparent 65%),
+    var(--color-surface-muted);
+}
+
+.gradient-cover--2::before {
+  background:
+    radial-gradient(60% 140% at 20% 75%, rgba(108, 155, 245, 0.6), transparent 60%),
+    radial-gradient(55% 160% at 85% 20%, rgba(167, 139, 250, 0.5), transparent 65%),
+    var(--color-surface-muted);
+}
+
+.gradient-cover--3::before {
+  background:
+    radial-gradient(60% 140% at 25% 20%, rgba(167, 139, 250, 0.6), transparent 60%),
+    radial-gradient(55% 160% at 75% 80%, rgba(127, 191, 138, 0.5), transparent 65%),
+    var(--color-surface-muted);
+}
+
+.gradient-cover--4::before {
+  background:
+    radial-gradient(60% 140% at 20% 70%, rgba(127, 191, 138, 0.6), transparent 60%),
+    radial-gradient(55% 160% at 80% 25%, rgba(255, 122, 69, 0.5), transparent 65%),
+    var(--color-surface-muted);
+}
+
+.gradient-cover--5::before {
+  background:
+    radial-gradient(55% 140% at 10% 40%, rgba(255, 122, 69, 0.55), transparent 60%),
+    radial-gradient(50% 150% at 40% 10%, rgba(167, 139, 250, 0.5), transparent 65%),
+    radial-gradient(55% 150% at 75% 85%, rgba(108, 155, 245, 0.5), transparent 65%),
+    radial-gradient(50% 150% at 95% 35%, rgba(127, 191, 138, 0.5), transparent 65%),
+    var(--color-surface-muted);
+}
+
+.event-photos__item--b.gradient-cover::before { transform: scale(1.3) rotate(12deg); }
+.event-photos__item--c.gradient-cover::before { transform: scale(1.25) rotate(-10deg); }
 
 .event-context-grid {
   margin-top: var(--space-6);

@@ -36,7 +36,7 @@ function renderSidebar(activeId) {
     <aside class="sidebar">
       <div class="sidebar__top">
         <div class="sidebar__brand">
-          <p class="sidebar__logo pixel-heading">СанАрт<span class="sidebar__logo-mark">*</span></p>
+          <img class="sidebar__logo-img" src="assets/img/logo.png" alt="СанАрт" />
           <p class="corner-label sidebar__tagline">Искусство<br />в движении</p>
         </div>
         <nav class="sidebar__nav" aria-label="Основная навигация">

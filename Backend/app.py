@@ -34,6 +34,24 @@ AGE_GROUP_LABELS = {
     "senior": "Старшее поколение",
 }
 
+# Длина окна в днях для каждой вкладки периода + подпись сравнения (как было
+# в оригинальном референсе: "чем вчера" / "чем на прошлой неделе" и т.д.).
+# "yesterday" — то же окно в 1 день, сдвинутое на день назад от "today".
+PERIOD_WINDOWS = {
+    "today": (1, 0),
+    "yesterday": (1, 1),
+    "week": (7, 0),
+    "month": (30, 0),
+    "quarter": (90, 0),
+}
+PERIOD_CAPTIONS = {
+    "today": "чем вчера",
+    "yesterday": "чем позавчера",
+    "week": "чем на прошлой неделе",
+    "month": "чем в прошлом месяце",
+    "quarter": "чем в прошлом квартале",
+}
+
 app = Flask(__name__)
 
 
@@ -140,8 +158,10 @@ def dashboard():
             if key in counts:
                 age_groups.append({"label": label, "pct": round(int(counts[key]) / total_visitors * 100, 1)})
 
-    institutions_df = read_sql("SELECT data_quality FROM institutions_official")
+    institutions_df = read_sql("SELECT institution_id, data_quality FROM institutions_official")
     flagged = int((institutions_df["data_quality"] != "OK").sum())
+    own_row = institutions_df[institutions_df["institution_id"] == institution_id].iloc[0]
+    own_quality = own_row["data_quality"]
 
     return jsonify(
         {
@@ -150,11 +170,80 @@ def dashboard():
             "eventTypes": event_types,
             "topEvents": top_events,
             "ageGroups": age_groups,
-            "dataQuality": {"institutionsFlagged": flagged, "institutionsTotal": int(len(institutions_df))},
+            "dataQuality": {
+                "institutionsFlagged": flagged,
+                "institutionsTotal": int(len(institutions_df)),
+                "ownStatus": own_quality,
+                "ownIsOk": own_quality == "OK",
+            },
             "dateRange": {
                 "min": events["date"].min() if len(events) else None,
                 "max": events["date"].max() if len(events) else None,
             },
+        }
+    )
+
+
+@app.route("/api/kpis")
+def kpis_by_period():
+    institution_id = request.args.get("institution_id", "")
+    period = request.args.get("period", "today")
+    if not require_known_institution(institution_id) or period not in PERIOD_WINDOWS:
+        return jsonify({"error": "bad request"}), 400
+
+    events = read_sql(
+        "SELECT event_id, date FROM events_synthetic WHERE institution_id = ?",
+        (institution_id,),
+    )
+    attendance = read_sql(
+        """
+        SELECT a.event_id, a.visitors, a.new_visitors, a.fill_rate_pct
+        FROM attendance_synthetic a
+        JOIN events_synthetic e ON e.event_id = a.event_id
+        WHERE e.institution_id = ?
+        """,
+        (institution_id,),
+    )
+    merged = events.merge(attendance, on="event_id")
+    merged["date"] = pd.to_datetime(merged["date"])
+
+    def window_metrics(frame):
+        return {
+            "visitors": int(frame["visitors"].sum()),
+            "newVisitors": int(frame["new_visitors"].sum()),
+            "eventsHeld": int(frame["event_id"].nunique()),
+            "avgFillRatePct": round(float(frame["fill_rate_pct"].mean()), 1) if len(frame) else 0.0,
+        }
+
+    empty = {"visitors": 0, "newVisitors": 0, "eventsHeld": 0, "avgFillRatePct": 0.0}
+    if merged.empty:
+        cur_metrics = prev_metrics = empty
+    else:
+        length, shift_windows = PERIOD_WINDOWS[period]
+        anchor = merged["date"].max()
+
+        cur_end = anchor - pd.Timedelta(days=shift_windows * length)
+        cur_start = cur_end - pd.Timedelta(days=length - 1)
+        prev_end = cur_start - pd.Timedelta(days=1)
+        prev_start = prev_end - pd.Timedelta(days=length - 1)
+
+        cur_metrics = window_metrics(merged[(merged["date"] >= cur_start) & (merged["date"] <= cur_end)])
+        prev_metrics = window_metrics(merged[(merged["date"] >= prev_start) & (merged["date"] <= prev_end)])
+
+    def build_kpi(key):
+        cur_v = cur_metrics[key]
+        prev_v = prev_metrics[key]
+        if prev_v:
+            delta_pct = round((cur_v - prev_v) / prev_v * 100, 1)
+            return {"value": cur_v, "deltaPct": delta_pct, "deltaDir": "up" if delta_pct >= 0 else "down", "caption": PERIOD_CAPTIONS[period]}
+        return {"value": cur_v, "deltaPct": None, "deltaDir": None, "caption": "нет данных за пред. период"}
+
+    return jsonify(
+        {
+            "visitors": build_kpi("visitors"),
+            "newVisitors": build_kpi("newVisitors"),
+            "eventsHeld": build_kpi("eventsHeld"),
+            "avgFillRatePct": build_kpi("avgFillRatePct"),
         }
     )
 

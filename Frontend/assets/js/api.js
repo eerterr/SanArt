@@ -37,6 +37,14 @@ function sanartSetActiveInstitutionId(id) {
   localStorage.setItem(SANART_ACTIVE_INSTITUTION_KEY, id);
 }
 
+// Страницы приложения (дашборд/ивенты) доступны только после входа —
+// без выбранной организации сразу отправляем на login.html.
+function sanartRequireActiveInstitution() {
+  if (localStorage.getItem(SANART_ACTIVE_INSTITUTION_KEY)) return true;
+  window.location.href = "login.html";
+  return false;
+}
+
 function sanartWithColors(items) {
   return items.map((item, i) => ({ ...item, color: SANART_PALETTE[i % SANART_PALETTE.length] }));
 }

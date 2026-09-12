@@ -10,6 +10,20 @@
 
 let sanartEventsById = {};
 
+// Заглушки обложек мероприятий (нет реальных фото) — цветной градиент
+// подбирается по типу мероприятия, чтобы выглядело осмысленно, а не случайно.
+const EVENT_TYPE_GRADIENT = {
+  Выставка: "gradient-cover--1",
+  Лекция: "gradient-cover--2",
+  "Мастер-класс": "gradient-cover--3",
+  "Творческая встреча": "gradient-cover--4",
+  Концерт: "gradient-cover--5",
+};
+
+function sanartGradientClass(type) {
+  return EVENT_TYPE_GRADIENT[type] || "gradient-cover--1";
+}
+
 function escapeHtml(str) {
   return String(str == null ? "" : str)
     .replace(/&/g, "&amp;")
@@ -24,10 +38,15 @@ function ru1(value) {
 function renderDataQualityBanner(dataQuality) {
   const mount = document.getElementById("dq-banner");
   if (!mount) return;
+
+  const message = dataQuality.ownIsOk
+    ? `<strong>Контроль качества:</strong> данные этой организации подтверждены (OK). По всей платформе у ${dataQuality.institutionsFlagged} из ${dataQuality.institutionsTotal} учреждений есть расхождения в отчётности — это не скрывается и видно в системе.`
+    : `<strong>Контроль качества:</strong> в отчётности этой организации обнаружены расхождения (${dataQuality.ownStatus}) — показатели по ней помечены и не скрыты. Всего по платформе такое у ${dataQuality.institutionsFlagged} из ${dataQuality.institutionsTotal} учреждений.`;
+
   mount.innerHTML = `
     <div class="dq-banner">
       <span class="dq-banner__icon">${SANART_ICONS.warning}</span>
-      <span><strong>Контроль качества:</strong> у ${dataQuality.institutionsFlagged} из ${dataQuality.institutionsTotal} учреждений обнаружены расхождения в исходных данных — значения по ним помечены и не скрыты из отчётов.</span>
+      <span>${message}</span>
     </div>`;
 }
 
@@ -80,9 +99,9 @@ function buildEventDetailHtml(event, full) {
       <button class="overlay__close" type="button" aria-label="Закрыть">${SANART_ICONS.close}</button>
     </div>
     <div class="event-photos">
-      <div class="event-photos__item event-photos__item--a">Фото</div>
-      <div class="event-photos__item event-photos__item--b">Фото</div>
-      <div class="event-photos__item event-photos__item--c">Фото</div>
+      <div class="event-photos__item event-photos__item--a gradient-cover ${sanartGradientClass(event.type)}"></div>
+      <div class="event-photos__item event-photos__item--b gradient-cover ${sanartGradientClass(event.type)}"></div>
+      <div class="event-photos__item event-photos__item--c gradient-cover ${sanartGradientClass(event.type)}"></div>
     </div>
     <div class="event-context-grid">
       <div class="event-context-item"><span class="event-context-item__label">Вместимость</span><span class="event-context-item__value">${formatNumber(event.capacity)}</span></div>
@@ -127,7 +146,7 @@ function renderEventCards(events) {
           <span class="event-card__name">${escapeHtml(e.name)}</span>
           <span class="event-card__date">${e.date}</span>
         </div>
-        <div class="event-card__photo">Фото</div>
+        <div class="event-card__photo gradient-cover ${sanartGradientClass(e.type)}"></div>
         <p class="event-card__caption">${e.type}</p>
         <div class="event-card__hover-panel">
           <div class="event-card__hover-stat"><span>Посетители</span><strong>${formatNumber(e.visitors)}</strong></div>
@@ -147,6 +166,8 @@ function renderEventCards(events) {
 }
 
 async function initEventsPage() {
+  if (!sanartRequireActiveInstitution()) return;
+
   const institutions = await sanartApiGet("/institutions");
   const institutionId = sanartGetActiveInstitutionId(institutions);
   const [dashboardData, events] = await Promise.all([
