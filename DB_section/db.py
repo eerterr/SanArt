@@ -3,12 +3,12 @@ from pathlib import Path
 import sqlite3
 
 BASE_DIR = Path(__file__).parent.resolve()
-DB_NAME = 'sanart.db'
+DB_NAME = str(BASE_DIR / 'sanart.db')  # абсолютный путь — не зависит от текущей рабочей директории
 DATA_DIR = BASE_DIR.parent / 'data'  # папка ../data
 
 def get_events_dataframe():
     with sqlite3.connect(DB_NAME) as conn:
-        return pd.read_sql("SELECT * FROM events", conn)
+        return pd.read_sql("SELECT * FROM events_synthetic", conn)
 
 def get_user_by_id(user_id: int):
     with sqlite3.connect(DB_NAME) as conn:
@@ -21,7 +21,7 @@ def add_event(event_name: str, metric_value: float):
     with sqlite3.connect(DB_NAME) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO events (name, value) VALUES (?, ?)",
+            "INSERT INTO events_synthetic (event_name, capacity) VALUES (?, ?)",
             (event_name, metric_value)
         )
         conn.commit()  # Без этого изменения не сохранятся

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>СанАрт — Дашборд</title>
+  <title>СанАрт — Ивенты</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/layout.css" />
   <link rel="stylesheet" href="assets/css/components.css" />
-  <link rel="stylesheet" href="assets/css/pages/dashboard.css" />
+  <link rel="stylesheet" href="assets/css/pages/events.css" />
 </head>
 <body>
   <!-- SVG-фильтр для "пиксельных" дисплейных заголовков (используется через .pixel-heading) -->
@@ -32,7 +32,7 @@
 
       <div class="content">
         <section class="dashboard-controls">
-          <img class="dashboard-hero__img" src="assets/img/dashboard-title.png" alt="Данные о посещаемости" />
+          <img class="events-hero__img" src="assets/img/events-title.png" alt="Ивенты" />
         </section>
 
         <div id="dq-banner"></div>
@@ -49,44 +49,16 @@
         </div>
 
         <section class="dashboard-controls">
-          <h2 class="section-title">Общие показатели</h2>
+          <h2 class="section-title">Все мероприятия</h2>
         </section>
 
-        <section class="kpi-grid" id="kpi-grid" aria-label="Ключевые показатели"></section>
-
-        <div class="dash-row dash-row--chart-donut">
-          <article class="card">
-            <div class="card__header">
-              <h3 class="card__title">Посещаемость</h3>
-            </div>
-            <div class="area-chart" id="attendance-chart"></div>
-          </article>
-
-          <article class="card">
-            <div class="card__header">
-              <h3 class="card__title">Мероприятия по типам</h3>
-            </div>
-            <div id="event-types-donut"></div>
-          </article>
-        </div>
-
-        <div class="dash-row dash-row--two">
-          <article class="card">
-            <div class="card__header">
-              <h3 class="card__title">Топ мероприятий по посещаемости</h3>
-            </div>
-            <div class="rank-list" id="top-events"></div>
-          </article>
-
-          <article class="card">
-            <div class="card__header">
-              <h3 class="card__title">Возраст аудитории</h3>
-            </div>
-            <div class="bar-chart" id="age-bar-chart"></div>
-          </article>
-        </div>
+        <div class="event-cards" id="event-cards" aria-label="Мероприятия"></div>
       </div>
     </main>
+  </div>
+
+  <div class="overlay" id="app-overlay" hidden>
+    <div class="overlay__panel" id="app-overlay-panel"></div>
   </div>
 
   <div id="ai-widget-mount"></div>
@@ -95,8 +67,7 @@
   <script src="assets/js/api.js"></script>
   <script src="assets/js/components/sidebar.js"></script>
   <script src="assets/js/components/topbar.js"></script>
-  <script src="assets/js/components/charts.js"></script>
   <script src="assets/js/components/ai-widget.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/events.js"></script>
 </body>
 </html>

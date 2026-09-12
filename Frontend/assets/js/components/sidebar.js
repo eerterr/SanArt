@@ -1,17 +1,13 @@
 /**
  * СанАрт — компонент бокового меню.
- * Финальный список вкладок и порядок — по ТЗ (раздел 03 «Архитектура интерфейса»):
- * Дашборд, Аудитория, Мероприятия, Отзывы, Отчёты.
- * «Аудитория» — намеренное решение вместо «Посетители» (см. UX-заметку в ТЗ,
- * раздел 02): снимает ощущение CRM/личного кабинета.
+ * Сознательно минимальный список вкладок на этом шаге: Дашборд, Мероприятия
+ * (по структуре из вайрфрейма). Остальные разделы добавятся позже вместе
+ * с реальными данными под них.
  */
 
 const SANART_NAV_ITEMS = [
   { id: "dashboard", label: "Дашборд", icon: "dashboard", href: "index.html", ready: true },
-  { id: "audience", label: "Аудитория", icon: "audience", href: "audience.html", ready: false },
-  { id: "events", label: "Мероприятия", icon: "events", href: "events.html", ready: false },
-  { id: "feedback", label: "Отзывы", icon: "feedback", href: "feedback.html", ready: false },
-  { id: "reports", label: "Отчёты", icon: "reports", href: "reports.html", ready: false },
+  { id: "events", label: "Мероприятия", icon: "events", href: "events.html", ready: true },
 ];
 
 function renderSidebar(activeId) {

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СанАрт — Вход</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages/login.css" />
+</head>
+<body>
+  <div class="login-shell">
+    <section class="login-brand">
+      <div>
+        <img class="login-brand__logo-img" src="assets/img/logo.png" alt="СанАрт" />
+        <p class="corner-label login-brand__tagline">Искусство<br />в движении</p>
+      </div>
+
+      <div>
+        <img class="login-brand__welcome-img" src="assets/img/welcome.png" alt="Добро пожаловать" />
+        <p class="login-brand__welcome-subtitle">Здесь искусство<br />становится ближе</p>
+      </div>
+
+      <div class="login-brand__bars" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="card login-card">
+        <div id="step-credentials" class="login-step">
+          <h1 class="section-title">Вход в СанАрт</h1>
+          <p class="form-hint login-step__hint">Демо-доступ: подойдёт любой email и пароль.</p>
+
+          <form id="login-form" class="login-form" novalidate>
+            <div class="form-field">
+              <label class="form-label" for="login-email">Email</label>
+              <input class="text-input" id="login-email" type="email" placeholder="user_login@mail.ru" required />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="login-password">Пароль</label>
+              <input class="text-input" id="login-password" type="password" placeholder="••••••••" required />
+            </div>
+            <button class="btn btn--primary btn--block" type="submit">Войти</button>
+          </form>
+        </div>
+
+        <div id="step-org" class="login-step" hidden>
+          <h1 class="section-title">Выберите организацию</h1>
+          <p class="form-hint login-step__hint">Один пользователь может состоять в нескольких организациях — переключить можно и позже, в хедере.</p>
+
+          <div class="org-options" id="org-options"></div>
+
+          <div class="login-step__actions">
+            <button class="btn btn--ghost" id="org-back" type="button">Назад</button>
+            <button class="btn btn--primary" id="org-continue" type="button">Продолжить</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/pages/login.js"></script>
+</body>
+</html>

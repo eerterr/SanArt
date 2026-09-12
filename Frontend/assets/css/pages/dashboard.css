@@ -1,7 +1,8 @@
 /* СанАрт — специфичная раскладка страницы «Дашборд» */
 
-.dashboard-hero__title {
-  font-size: var(--fs-display);
+.dashboard-hero__img {
+  height: 64px;
+  width: auto;
 }
 
 .dashboard-controls {

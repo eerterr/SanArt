@@ -35,4 +35,22 @@ const SANART_ICONS = {
   warning: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.8 18 16.4H2L10 2.8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 8.4v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="14.2" r="0.9" fill="currentColor"/></svg>`,
 
   pixelGlyph: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="8" height="8" fill="currentColor"/><rect x="11" y="0" width="4" height="4" fill="currentColor"/><rect x="0" y="11" width="4" height="4" fill="currentColor"/><rect x="9" y="9" width="9" height="9" fill="currentColor"/></svg>`,
+
+  close: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 5l10 10M15 5 5 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+
+  plus: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+
+  sparkle: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5 11.6 7.9 17 9.5l-5.4 1.6L10 16.5 8.4 11.1 3 9.5l5.4-1.6L10 2.5Z" fill="currentColor"/><path d="M16 2.5v3.4M14.3 4.2h3.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+
+  send: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 3 3 9.2l5.8 2 2 5.8L17 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M8.8 11.2 17 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+
+  star: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.6 12.5 7.7l5.6.8-4 4 1 5.6-5.1-2.7-5.1 2.7 1-5.6-4-4 5.6-.8L10 2.6Z" fill="currentColor"/></svg>`,
+
+  check: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  filter: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.5h14L11.5 10.8v4.7L8.5 17v-6.2L3 4.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
+
+  paperclip: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.7 6.3 7.9 12.1a2.4 2.4 0 0 0 3.4 3.4l6.1-6.1a4 4 0 1 0-5.7-5.7L5.6 9.8a5.6 5.6 0 1 0 7.9 7.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  logout: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 17H4.8A1.8 1.8 0 0 1 3 15.2V4.8A1.8 1.8 0 0 1 4.8 3H8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 6.5 17 10l-4 3.5M17 10H7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };

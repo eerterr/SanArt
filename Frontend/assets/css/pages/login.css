@@ -1,0 +1,168 @@
+/* СанАрт — экран авторизации: свой простой шелл, без сайдбара/хедера приложения */
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.login-brand {
+  background: var(--color-black);
+  color: var(--color-text-inverse);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-9);
+}
+
+.login-brand__logo-img {
+  width: 160px;
+  height: auto;
+  filter: invert(1);
+}
+
+.login-brand__tagline {
+  margin-top: var(--space-2);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.login-brand__bars {
+  display: flex;
+  gap: var(--space-3);
+  height: 10px;
+}
+
+.login-brand__bars span {
+  flex: 1;
+  border-radius: var(--radius-pill);
+}
+
+.login-brand__bars span:nth-child(1) { background: var(--color-accent-orange); }
+.login-brand__bars span:nth-child(2) { background: var(--color-accent-purple); }
+.login-brand__bars span:nth-child(3) { background: var(--color-accent-green); }
+
+.login-brand__welcome-img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  filter: invert(1);
+}
+
+.login-brand__welcome-subtitle {
+  margin-top: var(--space-4);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: var(--lh-snug);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.login-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-7);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-step__hint {
+  margin-top: var(--space-2);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.org-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.org-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-standard), background var(--duration-fast) var(--ease-standard);
+}
+
+.org-option:hover {
+  border-color: var(--color-border-strong);
+}
+
+.org-option--selected {
+  border-color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+.org-option__icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.org-option__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.org-option__name {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.org-option__meta {
+  font-size: var(--fs-sm);
+  color: var(--color-text-tertiary);
+}
+
+.org-option__check {
+  width: 18px;
+  height: 18px;
+  color: var(--color-accent-green);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.org-option--selected .org-option__check {
+  opacity: 1;
+}
+
+.login-step__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-7);
+}
+
+@media (max-width: 900px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand {
+    padding: var(--space-7);
+    gap: var(--space-6);
+  }
+}
